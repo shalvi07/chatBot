@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quick Tutorial: ${view.view_name} - ${page_title}</title>
+</head>
+<body>
+<h1>${view.view_name} - ${page_title}</h1>
+<p>Welcome, ${view.full_name}</p>
+<p>Enter port numner below</p>
+<form method="POST"
+      action="${request.current_route_url()}">
+    <input name="new_port"/>
+    <input type="submit" name="form.edit" value="Submit"/>
+
+</form>
+<p> <a href="${request.route_url('chatbox')}">checkinbox</a>.</p>
+
+</body>
+</html>
