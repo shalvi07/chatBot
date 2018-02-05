@@ -6,7 +6,27 @@
 <body>
 <h1>${view.view_name} - ${page_title}</h1>
 
-<p>Go to the <a href="${request.route_url('hello', first='jane',
-        last='doe')}">form</a>.</p>
+<p>Go to the <a href="${request.route_url('send', first='jane')}">form</a>.</p>
+<table>
+  <tr>
+    <th> User_Id</th>
+    <th>Name</th>
+  </tr>
+  <tr>
+    <td><a href = "${request.route_url('chatbox',
+      name='_default')}" >john</a></td>
+    <td>John</td>
+  </tr>
+  <tr>
+    <td>rohan</td>
+    <td>Rohan</td>
+  </tr>
+</table>
+<form>
+  <input type="radio" name="gender" value="male" checked> Male<br>
+  <input type="radio" name="gender" value="female"> Female<br>
+  <input type="radio" name="gender" value="other"> Other
+</form>
+
 </body>
 </html>

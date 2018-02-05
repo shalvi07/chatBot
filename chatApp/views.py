@@ -5,33 +5,43 @@ from pyramid.view import (
 import requests
 from utils import Listerner,Sender
 import json
+import uuid
+import pymongo
+from chatApp.models import USERS_COLLECTION,MESSAGE_COLLECTION
 
 
-rport = 8080
-@view_defaults(route_name='hello')
+# rport = 8080
+@view_defaults(route_name='send')
 class TutorialViews(object):
     def __init__(self, request):
         self.request = request
         self.view_name = 'TutorialViews'
+        # print(self.request.matchdict['first'])
+        # self.id = request.matchdict['first']
 
     @property
     def full_name(self):
+        print "in full_name"
         first = self.request.matchdict['first']
-        last = self.request.matchdict['last']
-        return first + ' ' + last
+        # last = self.request.matchdict['last']
+        print first
+        return first
 
     @view_config(route_name='home', renderer='home.pt')
     def home(self):
+        print("In home")
         return {'page_title': 'Home View'}
 
     # Retrieving /howdy/first/last the first time
-    @view_config(renderer='hello.pt')
+    @view_config(renderer='edit.pt')
     def hello(self):
-        return {'page_title': 'Hello View'}
+        print("in hello")
+        return {'page_title': 'Hello View','new_port':'self.id'}
 
     # Posting to /howdy/first/last via the "Edit" submit button
     @view_config(request_method='POST', renderer='edit.pt')
     def edit(self):
+        print("in edit")
         new_port = self.request.params['new_port']
         print(new_port)
         rport=new_port
@@ -60,12 +70,14 @@ class TutorialViews(object):
     #     listen=Listerner()
     #     listen.listerner(rport)
     #     return {'page_title': 'Message View', 'message': message}
-    @view_config(request_method = 'POST', request_param = 'form.message',
-                renderer='message.pt')
+    @view_config(route_name='chatbox',request_method = 'POST', request_param = 'form.message',
+                renderer='chatbox.pt')
     def sendmessage(self):
         message=self.request.params['message']
         # print(message)
-        url="http://127.0.0.1:" + str(rport) +'/chatbox'
+        # print full_name()
+        print("in sendmessage")
+        url="http://127.0.0.1:" + str(6543) +'/chatbox' +"/_john"
         data={'msg':message,'port':'6543'}
         data = json.dumps(data)
         r=requests.post(url,data=data)
@@ -73,7 +85,7 @@ class TutorialViews(object):
         print type(r),"qqqqqqqqq"
         print("message posted")
 
-        return {'page_title': 'Message View', 'message': message}
+        return {'view_name':'XYX','page_title': 'Message View', 'message': message,'name':'_default'}
 
 
 
@@ -90,7 +102,8 @@ class TutorialViews(object):
     #     print ()
 a={}
 print "shash"
-@view_config(route_name='chatbox',request_method='GET',renderer='chatbox.pt')
+@view_config(route_name='chatbox',
+            request_method='GET',renderer='chatbox2.pt')
 def receivedmessage(request):
     print "in get"
     # print('In receive')
@@ -98,13 +111,14 @@ def receivedmessage(request):
     # r = requests.get(url)
     # print r
     # a = self.request.json_body
-
+    print ("in recievemessage")
     print a
     msg= a.get('msg')
     print(msg)
     return {'view_name':'ChatBox','page_title':'Chatbox','message':msg}
 
-@view_config(route_name='chatbox',request_method='POST',renderer='chatbox.pt')
+@view_config(route_name='chatbox',
+            request_method='POST',renderer='chatbox.pt')
 def receivedmessage2(request):
     print('In receive22222')
     global a
@@ -118,14 +132,16 @@ def receivedmessage2(request):
     return {'view_name':'ChatBox','page_title':'Chatbox','message':str(msg)}
     # return msg
 
-@view_config(route_name='chatbox',request_method='POST',renderer='chatbox.pt',
-            request_param='form.reply'
-            )
+@view_config(route_name='chatbox',request_method='POST',
+            renderer='chatbox2.pt',request_param='form.reply')
+
 def sendreply(request):
+    print ("in sendreply")
     message=request.params['message']
     # print(message)
-    url="http://127.0.0.1:" + str(6543) +'/chatbox'
+    url="http://127.0.0.1:" + str(6543) +'/chatbox'+'/_default'
     data={'msg':message,'port':'8080'}
     data = json.dumps(data)
     r=requests.post(url,data=data)
-    return {'view_name':'ChatBox','page_title':'Chatbox','message':str(message)}
+    return {'view_name':'ChatBox','page_title':'Chatbox',
+            'message':str(message)}

@@ -8,9 +8,9 @@
 
 <p>Recieved Message:<code>${message}</code></p>
 <form method="POST"
-      action="${request.route_url('chatbox',name='_default')}">
+      action="${request.route_url('chatbox',name='_john')}">
     <input name="message"/>
-    <input type="submit" name="form.reply" value="Reply"/>
+    <input type="submit" name="form.message" value="Reply"/>
 </form>
 
 </body>
