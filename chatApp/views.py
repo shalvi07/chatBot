@@ -7,6 +7,7 @@ from utils import Listerner,Sender
 import json
 import uuid
 import pymongo
+import datetime
 from chatApp.models import USERS_COLLECTION,MESSAGE_COLLECTION
 
 
@@ -70,8 +71,8 @@ class TutorialViews(object):
     #     listen=Listerner()
     #     listen.listerner(rport)
     #     return {'page_title': 'Message View', 'message': message}
-    @view_config(route_name='chatbox',request_method = 'POST', request_param = 'form.message',
-                renderer='chatbox.pt')
+    @view_config(route_name='chatbox',request_method = 'POST',
+                request_param = 'form.message',renderer='chatbox.pt')
     def sendmessage(self):
         message=self.request.params['message']
         # print(message)
@@ -80,12 +81,19 @@ class TutorialViews(object):
         url="http://127.0.0.1:" + str(6543) +'/chatbox' +"/_john"
         data={'msg':message,'port':'6543'}
         data = json.dumps(data)
+
         r=requests.post(url,data=data)
+        message_id=MESSAGE_COLLECTION.insert_one({"sender":"Smith",
+                                                "receiver":"John",
+                                                "message":message,
+                                                "timestamp":datetime.datetime.utcnow()
+                                                }).inserted_id
 
         print type(r),"qqqqqqqqq"
         print("message posted")
 
-        return {'view_name':'XYX','page_title': 'Message View', 'message': message,'name':'_default'}
+        return {'view_name':'XYX','page_title':'Message View',
+                'message': message,'name':'_default'}
 
 
 
@@ -134,7 +142,6 @@ def receivedmessage2(request):
 
 @view_config(route_name='chatbox',request_method='POST',
             renderer='chatbox2.pt',request_param='form.reply')
-
 def sendreply(request):
     print ("in sendreply")
     message=request.params['message']
@@ -143,5 +150,30 @@ def sendreply(request):
     data={'msg':message,'port':'8080'}
     data = json.dumps(data)
     r=requests.post(url,data=data)
+    message_id=MESSAGE_COLLECTION.insert_one({"sender":"John",
+                                            "receiver":"Smith",
+                                            "message":message,
+                                            "timestamp":datetime.datetime.utcnow()
+                                            }).inserted_id
     return {'view_name':'ChatBox','page_title':'Chatbox',
             'message':str(message)}
+
+
+
+@view_config(route_name='history',request_method='GET',
+            renderer='history.pt')
+def history(request):
+    reciever = request.url[36:]
+    message=MESSAGE_COLLECTION.find({"sender":"Smith",
+                                "receiver":"John"}).sort(
+                                'timestamp',pymongo.DESCENDING)
+    msghistory = list()
+    for record in message:
+        draft={
+                'message':record['message'],
+                'sender': record['sender'],
+                'receiver':record['receiver'],
+                'timestamp':record['timestamp']
+                }
+        msghistory.append(draft)
+    return {'msghistory':msghistory}
