@@ -6,7 +6,7 @@
 <body>
 <h1>${view.view_name} - ${page_title}</h1>
 
-<p>Go to the <a href="${request.route_url('send', first='jane')}">form</a>.</p>
+
 
 <form action="${request.route_url('chatbox',name='_Smith')}">
   <input type="radio" name="receiver" value="John" checked> John<br>
