@@ -7,22 +7,17 @@
 <h1>${view.view_name} - ${page_title}</h1>
 
 <p>Go to the <a href="${request.route_url('send', first='jane')}">form</a>.</p>
-<table>
-  <tr>
-    <th> User_Id</th>
-    <th>Name</th>
-  </tr>
-  <tr>
-    <td><a href = "${request.route_url('chatbox',
-      name='_default')}" >john</a></td>
-    <td>John</td>
-  </tr>
-  <tr>
-    <td>rohan</td>
-    <td>Rohan</td>
-  </tr>
-</table>
 
+<form action="${request.route_url('chatbox',name='_Smith')}">
+  <input type="radio" name="receiver" value="John" checked> John<br>
+  <input type="radio" name="receiver" value="Helen"> Helen<br>
+  <input type="radio" name="receiver" value="Harry"> Harry<br>
+  <input type="radio" name="receiver" value="Sam"> Sam<br>
+
+
+
+    <input type="submit" name="form.message" value="Send"/>
+</form>
 
 </body>
 </html>

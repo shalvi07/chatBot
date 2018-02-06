@@ -10,7 +10,7 @@ import pymongo
 import datetime
 from chatApp.models import USERS_COLLECTION,MESSAGE_COLLECTION
 
-
+receiver = "John"
 # rport = 8080
 @view_defaults(route_name='send')
 class TutorialViews(object):
@@ -30,6 +30,11 @@ class TutorialViews(object):
 
     @view_config(route_name='home', renderer='home.pt')
     def home(self):
+
+        global receiver
+        print self.request.params
+        # receiver = self.request.params['receiver']
+        # print receiver
         print("In home")
         return {'page_title': 'Home View'}
 
@@ -40,18 +45,18 @@ class TutorialViews(object):
         return {'page_title': 'Hello View','new_port':'self.id'}
 
     # Posting to /howdy/first/last via the "Edit" submit button
-    @view_config(request_method='POST', renderer='edit.pt')
-    def edit(self):
-        print("in edit")
-        new_port = self.request.params['new_port']
-        print(new_port)
-        rport=new_port
-        # listen=Listerner()
-        # listen.listerner(6543)
-        # send = Sender()
-        # send.sender()
-        print("here")
-        return {'page_title': 'Edit View', 'new_port': new_port}
+    # @view_config(request_method='POST', renderer='edit.pt')
+    # def edit(self):
+    #     print("in edit")
+    #     new_port = self.request.params['new_port']
+    #     print(new_port)
+    #     rport=new_port
+    #     # listen=Listerner()
+    #     # listen.listerner(6543)
+    #     # send = Sender()
+    #     # send.sender()
+    #     print("here")
+    #     return {'page_title': 'Edit View', 'new_port': new_port}
 
     # Posting to /howdy/first/last via the "Delete" submit button
     # @view_config(request_method='POST', request_param='form.delete',
@@ -78,13 +83,13 @@ class TutorialViews(object):
         # print(message)
         # print full_name()
         print("in sendmessage")
-        url="http://127.0.0.1:" + str(6543) +'/chatbox' +"/_john"
+        url="http://127.0.0.1:" + str(6543) +'/chatbox' +"/_" + receiver
         data={'msg':message,'port':'6543'}
         data = json.dumps(data)
 
         r=requests.post(url,data=data)
         message_id=MESSAGE_COLLECTION.insert_one({"sender":"Smith",
-                                                "receiver":"John",
+                                                "receiver":receiver,
                                                 "message":message,
                                                 "timestamp":datetime.datetime.utcnow()
                                                 }).inserted_id
@@ -119,8 +124,14 @@ def receivedmessage(request):
     # r = requests.get(url)
     # print r
     # a = self.request.json_body
+    global receiver
+    try:
+        receiver = request.params['receiver']
+    except KeyError:
+        print "KeyError occured"
     print ("in recievemessage")
     print a
+    print receiver
     msg= a.get('msg')
     print(msg)
     return {'view_name':'ChatBox','page_title':'Chatbox','message':msg}
@@ -146,11 +157,11 @@ def sendreply(request):
     print ("in sendreply")
     message=request.params['message']
     # print(message)
-    url="http://127.0.0.1:" + str(6543) +'/chatbox'+'/_default'
+    url="http://127.0.0.1:" + str(6543) +'/chatbox'+'/_Smith'
     data={'msg':message,'port':'8080'}
     data = json.dumps(data)
     r=requests.post(url,data=data)
-    message_id=MESSAGE_COLLECTION.insert_one({"sender":"John",
+    message_id=MESSAGE_COLLECTION.insert_one({"sender":receiver,
                                             "receiver":"Smith",
                                             "message":message,
                                             "timestamp":datetime.datetime.utcnow()
@@ -163,11 +174,12 @@ def sendreply(request):
 @view_config(route_name='history',request_method='GET',
             renderer='history.pt')
 def history(request):
-    reciever = request.url[36:]
-    message=MESSAGE_COLLECTION.find({'$or':[{"sender":"Smith"},
-                                            {"sender":"John"}],
-                                    '$or':[{"receiver":"John"},
-                                    {"receiver":"Smith"}]}).sort('timestamp',
+    # receiver = request.url[36:]
+    print receiver
+    message=MESSAGE_COLLECTION.find({'$and':[{"sender":"Smith"},
+                                            {"receiver":receiver}],
+                                    '$and':[{"receiver":"Smith"},
+                                    {"sender":receiver}]}).sort('timestamp',
                                                             pymongo.DESCENDING)
     # for record in message:
     #     print record['message']
