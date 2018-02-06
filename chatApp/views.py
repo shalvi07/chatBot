@@ -164,9 +164,13 @@ def sendreply(request):
             renderer='history.pt')
 def history(request):
     reciever = request.url[36:]
-    message=MESSAGE_COLLECTION.find({"sender":"Smith",
-                                "receiver":"John"}).sort(
-                                'timestamp',pymongo.DESCENDING)
+    message=MESSAGE_COLLECTION.find({'$or':[{"sender":"Smith"},
+                                            {"sender":"John"}],
+                                    '$or':[{"receiver":"John"},
+                                    {"receiver":"Smith"}]}).sort('timestamp',
+                                                            pymongo.DESCENDING)
+    # for record in message:
+    #     print record['message']
     msghistory = list()
     for record in message:
         draft={
