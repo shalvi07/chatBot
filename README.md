@@ -19,6 +19,6 @@ For eg: http://localhost:6543/chatbox/_Smith opens chatbox for Smith. Assuming S
 ## http://localhost:6543/history/
 Displays history of messages send between Smith and any other user.
 for eg http://localhost:6543/history/Smith_John gives history of chat between Smith and John.
-Similarly http://localhost:6543/history/Smith_Helen gives chat history between Smith and John. Smith is by default (and as of now only) the first person.
+Similarly http://localhost:6543/history/Smith_Helen gives chat history between Smith and Helen. Smith is by default (and as of now only) the first person.
 
 __Note__: Smith is by default(and as of now only) the first user since login logout feature is not supported. Changing default user can be added in next interation. First user is the user who starts the application and sends message to the other user(Second user).Multiple Second users supported.
