@@ -14,7 +14,7 @@ __Home Page__ with options to select user to send message
 
 ## http://localhost:6543/chatbox/
 Displays most recent message received and a text box to send reply
-For eg: http://localhost:6543/chatbox/_Smith opens chatbox for Smith. Assuming Smith(default user) selects John from home page,he would send message to John. John will be able to see the message at http://localhost:6543/chatbox/_John.
+For eg: http://localhost:6543/chatbox/\_Smith opens chatbox for Smith. Assuming Smith(default user) selects John from home page,he would send message to John. John will be able to see the message at http://localhost:6543/chatbox/_John.
 
 ## http://localhost:6543/history/
 Displays history of messages send between Smith and any other user.
