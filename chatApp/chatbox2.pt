@@ -5,10 +5,9 @@
 </head>
 <body>
 <h1>${view_name} - ${page_title}</h1>
-
 <p>Recieved Message:<code>${message}</code></p>
 <form method="POST"
-      action="${request.route_url('chatbox',name='_John')}">
+      action="${request.route_url('chatbox', name=name)}">
     <input name="message"/>
     <input type="submit" name="form.message" value="Reply"/>
 </form>
