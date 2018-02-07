@@ -14,13 +14,13 @@ __Home Page__ with options to select user to send message
 Request: GET
 Response :
 
-## http://localhost:6543/chatbox/{_receiver}
-Displays most recent message received and a text box to send reply
+## http://localhost:6543/chatbox/{_user}
+Displays most recent message received or sent and a text box to send reply
 For eg: http://localhost:6543/chatbox/\_Smith opens chatbox for Smith. Assuming Smith(default user) selects John from home page,he would send message to John. John will be able to see the message at http://localhost:6543/chatbox/\_John.
 
 Request: Get : Params: form.message,receiver
 
-         Post : Params: form.message, message
+         Post : Params: form.message, form.reply, message
                 File: _{receiver}
     {_receiver} is the parameter to endpoint.   
 
