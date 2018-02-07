@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Quick Tutorial: ${view_name} - ${page_title}</title>
+    <title>chatBot: ${page_title}</title>
 </head>
 <body>
-<h1>${view_name} - ${page_title}</h1>
-
-<p>Recieved Message:<code>${message}</code></p>
+<h1>${page_title}</h1>
+<div tal:condition = test>
+<p>Latest Message:<code>${message}</code></p>
+<div tal:condition='show_form_reply'>
 <form method="POST"
-      action="${request.route_url('chatbox',name='_Smith')}">
+      action="${request.current_route_url()}">
     <input name="message"/>
     <input type="submit" name="form.reply" value="Reply"/>
 </form>
-
+</div>
+<div tal:condition='show_form_message'>
+<form method="POST"
+      action="${request.current_route_url()}">
+    <input name="message"/>
+    <input type="submit" name="form.message" value="Reply"/>
+</form>
+</div>
+</div>
 </body>
 </html>
