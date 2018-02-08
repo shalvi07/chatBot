@@ -3,10 +3,10 @@ from setuptools import setup
 requires = [
     'pyramid',
     'waitress',
-    'pyramid_chameleon'
-    'pymongo'
-    'pyramid_debugtoolbar'
-    'requests'
+    'pyramid_chameleon',
+    'pymongo',
+    'pyramid_debugtoolbar',
+    'requests',
     'pymongo'
 ]
 
