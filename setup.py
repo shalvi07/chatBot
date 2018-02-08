@@ -4,6 +4,10 @@ requires = [
     'pyramid',
     'waitress',
     'pyramid_chameleon'
+    'pymongo'
+    'pyramid_debugtoolbar'
+    'requests'
+    'pymongo'
 ]
 
 setup(name='chatApp',

@@ -30,8 +30,6 @@ class ChatViews(object):
                 request_param = 'form.message',renderer='chatbox.pt')
     def sendmessage(self):
         message = self.request.params['message']
-        # print(message)
-        # print full_name()
         print("in sendmessage")
         url="http://127.0.0.1:" + str(6543) +'/chatbox' +"/_" + receiver
         data={'msg':message,'port':'6543'}
@@ -102,13 +100,8 @@ def receivedmessage2(request):
     a = request.json_body
     msg = a.get('msg')
     print msg
-
-    # url="http://127.0.0.1:" + str(rport) +'/message'
-    # r = requests.post(url,)
-    # print r
     return {'view_name':'ChatBox','page_title':'Chatbox','message':str(msg),
             'show_form_message':True,'show_form_reply':True,'test':True}
-    # return msg
 
 @view_config(route_name='chatbox',request_method='POST',
             renderer='chatbox.pt',request_param='form.reply')
