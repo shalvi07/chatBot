@@ -34,3 +34,14 @@ Request: GET: File: {Sender_Receiver}
 {Sender_Receiver} is the parameter to endpoint
 
 __Note__: Smith is by default(and as of now only) the first user since login logout feature is not supported. Changing default user can be added in next interation. First user is the user who starts the application and sends message to the other user(Second user).Multiple Second users supported.
+
+
+## Install Notes
+1. Fork and clone the repo.
+2. Install mongodb
+3. Install and set up a virtual environment
+4. Setup a dummy db.
+5. Run following commands
+    1. cd chatBot
+    2. pip install -e .
+    3. pserve development.ini --reload
