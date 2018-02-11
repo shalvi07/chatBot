@@ -12,28 +12,35 @@ MongoDB as Database.
 ## http://localhost:6543/
 __Home Page__ with options to select user to send message
 Request: GET
-Response :
+Response : HTML Page (home.pt)
 
-## http://localhost:6543/chatbox/{_user}
+## http://localhost:6543/chatbox/{sender}/{receiver}
 Displays most recent message received or sent and a text box to send reply
-For eg: http://localhost:6543/chatbox/\_Smith opens chatbox for Smith. Assuming Smith(default user) selects John from home page,he would send message to John. John will be able to see the message at http://localhost:6543/chatbox/\_John.
+For eg: http://localhost:6543/chatbox/Smith opens chatbox for Smith. Assuming Smith(default user) selects John from home page,he would send message to John. John will be able to see the message at http://localhost:6543/chatbox/\_John.
 
-Request: Get : Params: form.message,receiver
+Request: 
+         Get : Params: sender,receiver
+         Displays most recent messages (5) received or sent in between the user.
+            
+         Post : Params: sender, receiver
+                Body: message
+        Posts the message from sender to the receiver
+Response:
+        Get: message and HTTP status.
+        Post: Message and HTTP status
+    
+ Sender and Receiver are parameters to url.   
 
-         Post : Params: form.message, form.reply, message
-                File: _{receiver}
-    {_receiver} is the parameter to endpoint.   
-
-## http://localhost:6543/history/{Sender_Receiver}
-Displays history of messages send between Smith and any other user.
+## http://localhost:6543/history/{firstperson}/{secondperson}
+Displays history of messages send between any two user existing in database
 for eg http://localhost:6543/history/Smith_John gives history of chat between Smith and John.
 Similarly http://localhost:6543/history/Smith_Helen gives chat history between Smith and Helen. Smith is by default (and as of now only) the first person.
 
-Request: GET: File: {Sender_Receiver}
+Request: GET: parameters: firstperson, secondperson
 
-{Sender_Receiver} is the parameter to endpoint
+Response: HTML page with complete chat history.
+firstperson, secondperson is the parameter to endpoint
 
-__Note__: Smith is by default(and as of now only) the first user since login logout feature is not supported. Changing default user can be added in next interation. First user is the user who starts the application and sends message to the other user(Second user).Multiple Second users supported.
 
 
 ## Install Notes
