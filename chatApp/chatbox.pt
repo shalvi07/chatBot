@@ -9,7 +9,7 @@
 <p>Latest Message:<code>${message}</code></p>
 <div tal:condition='show_form_reply'>
 <form method="POST"
-      action="${request.current_route_url()}">
+      action="">
     <input name="message"/>
     <input type="submit" name="form.reply" value="Reply"/>
 </form>

@@ -1,3 +1,5 @@
 <head></head>
-${msghistory}
-<body></body>
+
+<body>
+  ${msghistory}
+</body>

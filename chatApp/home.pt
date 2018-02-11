@@ -8,13 +8,18 @@
 
 
 
-<form action="${request.route_url('chatbox',name='_Smith')}">
+<form action="">
   <input type="radio" name="receiver" value="John" checked> John<br>
   <input type="radio" name="receiver" value="Helen"> Helen<br>
   <input type="radio" name="receiver" value="Harry"> Harry<br>
   <input type="radio" name="receiver" value="Sam"> Sam<br>
-
-
+  <input type="radio" name="receiver" value="Smith"> Smith<br>
+Select Sender:
+<input type="radio" name="sender" value="Smith" checked> Smith<br>
+    <input type="radio" name="sender" value="John" > John<br>
+    <input type="radio" name="sender" value="Helen"> Helen<br>
+    <input type="radio" name="sender" value="Harry"> Harry<br>
+    <input type="radio" name="sender" value="Sam"> Sam<br>
 
     <input type="submit" name="form.message" value="Send"/>
 </form>
