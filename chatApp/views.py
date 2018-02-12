@@ -10,8 +10,12 @@ import json
 import uuid
 import pymongo
 import datetime
+from dateutil import tz
 from chatApp.models import USERS_COLLECTION,MESSAGE_COLLECTION
+from_zone = tz.tzutc()
+to_zone = tz.tzlocal()
 
+# localtz = tzlocal.get_localzone()
 receiver = "John"
 sender = 'Smith'
 a={}
@@ -48,7 +52,8 @@ class ChatViews(object):
             except ValueError:
                 resp =  Response(body=json.JSONEncoder().encode({'message':
                                                                 'Please enter MEssage',
-                                                                'sender':sender,'receiver':receiver}),
+                                                                'sender':sender,
+                                                                'receiver':receiver}),
                                 status=500, content_type='application/json')
                 return resp
 
@@ -65,10 +70,16 @@ class ChatViews(object):
                                                 }).inserted_id
         # print type(r),"qqqqqqqqq"
             print("message posted")
-            resp =  Response(body=json.JSONEncoder().encode({'message': message,'sender':sender,'receiver':receiver}), status=200, content_type='application/json')
+            resp =  Response(body=json.JSONEncoder().encode({'message': message,
+                                                            'sender':sender,
+                                                            'receiver':receiver}),
+                            status=200, content_type='application/json')
             return resp
         else:
-            resp = Response(body=json.JSONEncoder().encode({'message': 'User does not exit','sender':sender,'receiver':receiver}), status=422, content_type='application/json')
+            resp = Response(body=json.JSONEncoder().encode({'message': 'User does not exit',
+                                                            'sender':sender,
+                                                            'receiver':receiver}),
+                            status=422, content_type='application/json')
             return resp
 
         # return {'view_name':'XYX','page_title':'Chatbox',
@@ -88,17 +99,24 @@ def receivedmessage(request):
     # user = request.url[31:]
     # print user
     # print param
+    print type(request)
     if userexits(sender,userlist) and userexits(receiver,userlist):
         recentmessagelist = list()
         recentmessages = MESSAGE_COLLECTION.find({'$or':[{"sender":sender,"receiver":receiver},
                                                         {"sender":receiver,"receiver":sender}
                                                         ]}).sort('timestamp',pymongo.DESCENDING).limit(5)
         for record in recentmessages:
+
+            temp=record['timestamp']
+            print temp
+            temp = temp.replace(tzinfo=from_zone)
+            print temp
+            temp = temp.astimezone(to_zone)
             draft={
                     'message':record['message'],
                     'sender': record['sender'],
                     'receiver':record['receiver'],
-                    'timestamp':record['timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+                    'timestamp':temp.strftime("%Y-%m-%d %H:%M:%S")
                     }
             recentmessagelist.append(draft)
         # print user
@@ -112,10 +130,13 @@ def receivedmessage(request):
         # else:
         #     showSendMessage = False
         #     showSendReply = True
-        resp = Response(body=json.JSONEncoder().encode(recentmessagelist), status=200, content_type='application/json')
+        resp = Response(body=json.JSONEncoder().encode(recentmessagelist),
+                        status=200, content_type='application/json')
         return resp
     else:
-        resp = Response(body=json.JSONEncoder().encode({'message': 'User does not exit','sender':sender,'receiver':receiver}), status=422, content_type='application/json')
+        resp = Response(body=json.JSONEncoder().encode({'message': 'User does not exit',
+                                                        'sender':sender,'receiver':receiver}),
+                        status=422, content_type='application/json')
         return resp
     # print ("in recievemessage")
     # print a
@@ -176,11 +197,16 @@ def history(request):
                                             }).sort('timestamp',pymongo.DESCENDING)
     msghistory = list()
     for record in message:
+        temp=record['timestamp']
+        print temp
+        temp = temp.replace(tzinfo=from_zone)
+        print temp
+        temp = temp.astimezone(to_zone).strftime("%Y-%m-%d %H:%M:%S")
         draft={
                 'message':record['message'],
                 'sender': record['sender'],
                 'receiver':record['receiver'],
-                'timestamp':record['timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+                'timestamp':temp
                 }
         msghistory.append(draft)
     return {'msghistory':msghistory}
