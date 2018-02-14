@@ -188,7 +188,7 @@ def receivedmessage(request):
 def history(request):
     first = request.matchdict.get('first')
     second = request.matchdict.get('second')
-    print receiver
+
     if Utilobj.userexits(first) and Utilobj.userexits(second):
         print 'hereeeeee'
         message=MESSAGE_COLLECTION.find({'$or': [{"receiver":first,"sender":second},

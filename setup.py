@@ -7,7 +7,8 @@ requires = [
     'pymongo',
     'pyramid_debugtoolbar',
     'requests',
-    'pymongo'
+    'pymongo',
+    'python-dateutil'
 ]
 
 setup(name='chatApp',
