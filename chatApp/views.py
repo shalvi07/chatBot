@@ -21,12 +21,12 @@ class ChatViews(object):
         self.request = request
         self.view_name = 'ChatApp'
 
-    # @view_config(route_name='home', renderer='home.pt')
-    # def home(self):
-    #     global receiver
-    #     print self.request
-    #     print("In home")
-    #     return {'page_title': 'Home View'}
+    @view_config(route_name='home', renderer='home.pt')
+    def home(self):
+        global receiver
+        print self.request
+        print("In home")
+        return {'page_title': 'Home View'}
 
     @view_config(route_name='chatbox',request_method = 'POST')
     def sendmessage(self):
