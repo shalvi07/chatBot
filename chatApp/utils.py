@@ -4,7 +4,7 @@ from chatApp.models import USERS_COLLECTION,MESSAGE_COLLECTION
 users = USERS_COLLECTION.find()
 userlist = list()
 for record in users:
-    userlist.append(record['name'])
+    userlist.append(record['username'])
 
 
 class Listerner():
@@ -56,7 +56,6 @@ class Utils():
     def __init__(self):
         self.from_zone = tz.tzutc()
         self.to_zone = tz.tzlocal()
-
     def userexits(self,user):
         global userlist
         if user in userlist:
