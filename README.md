@@ -18,7 +18,7 @@ Response : HTML Page (home.pt)
 EndPoint to send and view messages between sender and receiver.
 For eg: http://localhost:6543/chatbox/Smith/John opens chatbox for Smith. Smith will now be able to send message to John through post request and view messages between them using get request.
 
-By Default Get request would return 5 most recent message. If the user wants to see more messages, he/she passes a parameter in request __numsrollup__ which has an **Integer** value as in number of times the user clicks on the scrool up button, by default its value is assumed to be 1, If user clicks for the first time the value passed should be 2 the GET request thus made would return 10 messages, if the user presses the scrollup button again value of __numscrollup__ should now be passed 3, the request thus made will return 15 messages and so on..
+By Default Get request would return 5 most recent messages. If the user wants to see more messages, he/she passes a parameter in request __numsrollup__ which takes an **Integer** value as in number of times the user clicks on the scrool up button, by default its value is assumed to be 1, If user wants to scroll up for the first time the value passed should be 2 the GET request thus made would return 10 messages, if the user presses the scrollup button again value of __numscrollup__ should now be passed 3, the request thus made will return 15 messages and so on..
 John will be able to see the message at http://localhost:6543/chatbox/John/Smith
 
 Request: 
@@ -55,15 +55,14 @@ Request:
 Response:
         Post: Message,ResponseMessage and HTTP status
 
-## http://localhost:6543/history/{firstperson}/{secondperson}
+## http://localhost:6543/history/{first}/{second}
 Displays history of messages send between any two user existing in database
-for eg http://localhost:6543/history/Smith_John gives history of chat between Smith and John.
-Similarly http://localhost:6543/history/Smith_Helen gives chat history between Smith and Helen. Smith is by default (and as of now only) the first person.
+for eg http://localhost:6543/history/Smith/John gives history of chat between Smith and John.
+Similarly http://localhost:6543/history/Smith/Helen gives chat history between Smith and Helen. 
 
-Request: GET: parameters: firstperson, secondperson
+Request: GET: parameters: first, second
 
-Response: HTML page with complete chat history.
-firstperson, secondperson is the parameter to endpoint
+Response: List of all messages between two users.(first and second)
 
 
 
