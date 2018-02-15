@@ -118,16 +118,13 @@ def inbox(request):
     print user
     if Utilobj.userexits(user):
         inboxlist=list()
-        recentmessages = MESSAGE_COLLECTION.find({"read":0,"receiver":user}
-                                                ).sort('timestamp',
-                                                        pymongo.DESCENDING)
+        recentmessages = MESSAGE_COLLECTION.aggregate([{'$match':{"receiver":user,"read":0}},{'$group':{'_id':"$sender","count":{'$sum':1},"message":{'$last':"$message"}}}])
         for record in recentmessages:
-            temp = Utilobj.convert_to_local_tz(record['timestamp'])
             draft={
                     'message':record['message'],
-                    'sender': record['sender'],
-                    'receiver':record['receiver'],
-                    'timestamp':temp.strftime("%Y-%m-%d %H:%M:%S")
+                    'sender': record['_id'],
+                    'receiver':user,
+                    'unread_messages':record['count']
                     }
             inboxlist.append(draft)
         resp = Response(body=json.JSONEncoder().encode(inboxlist),
