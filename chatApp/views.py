@@ -109,7 +109,6 @@ class ChatViews(object):
         #                                                     'sender':sender,
         #                                                     'receiver':receiver}),
         #                     status=422, content_type='application/json')
-        #     return resp
 
 
 @view_config(route_name='inbox',request_method='GET')
