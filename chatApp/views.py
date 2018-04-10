@@ -118,7 +118,9 @@ def inbox(request):
     print user
     if Utilobj.userexits(user):
         inboxlist=list()
-        recentmessages = MESSAGE_COLLECTION.aggregate([{'$match':{"receiver":user,"read":0}},{'$group':{'_id':"$sender","count":{'$sum':1},"message":{'$last':"$message"}}}])
+        recentmessages = MESSAGE_COLLECTION.aggregate([{'$match':{"receiver":user,"read":0}},
+                                                       {'$group':{'_id':"$sender","count":{'$sum':1},
+                                                                   "message":{'$last':"$message"}}}])
         for record in recentmessages:
             draft={
                     'message':record['message'],
@@ -170,7 +172,8 @@ def receivedmessage(request):
                     'timestamp':temp.strftime("%Y-%m-%d %H:%M:%S")
                     }
             recentmessagelist.append(draft)
-        MESSAGE_COLLECTION.update({"$and":[{"_id":{'$in':ids}},{"receiver":sender}]},{"$set":{"read":1}},multi=True,upsert=False)
+        MESSAGE_COLLECTION.update({"$and":[{"_id":{'$in':ids}},{"receiver":sender}]},
+                                  {"$set":{"read":1}},multi=True,upsert=False)
         resp = Response(body=json.JSONEncoder().encode(recentmessagelist),
                         status=200, content_type='application/json')
     else:
